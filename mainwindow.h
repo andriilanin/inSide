@@ -17,6 +17,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void handleChatClicks(QString chatId);
+
 private:
     Ui::MainWindow *ui;
 };
