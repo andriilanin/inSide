@@ -7,30 +7,17 @@
 #include <QLabel>
 #include <QString>
 #include <QDebug>
-#include "chatitem.h"
-
-QString currentChatId = "";
-
-
+#include "chatgui.h"
+#include "chatslist.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QWidget *scrollContent = new QWidget;
-    QVBoxLayout* scrollLayout = new QVBoxLayout(scrollContent);
-    for (int i = 0; i < 4; ++i) {
-        ChatItem* newItem = new ChatItem("dasd", "sqweeqw", "123");
+    ui->ChatsListLayout->addWidget(new ChatsList(this));
 
-        scrollLayout->addWidget(newItem);
-        scrollLayout->setSpacing(5);
-        connect(newItem, &ChatItem::clicked, this, &MainWindow::handleChatClicks);
-    };
-    scrollLayout->addStretch();
-
-    scrollContent->setLayout(scrollLayout);
-    ui->scrollArea->setWidget(scrollContent);
+    // ui->currentChatLayout->addWidget(new ChatGUI("chat1"));
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +25,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::handleChatClicks(QString chatId) {
-    qDebug() << chatId;
+void MainWindow::setCurrentChatGUIObj(QString chatId) {
+    ui->selectChatLabel->hide();
+    if (this->currentChatGUIObj != nullptr) {
+        delete currentChatGUIObj;
+    };
+    this->currentChatGUIObj = new ChatGUI(chatId);
+    ui->currentChatLayout->addWidget(this->currentChatGUIObj);
 };
+

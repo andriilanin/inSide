@@ -1,13 +1,15 @@
 #include "chatitem.h"
 #include "ui_chatitem.h"
+#include <QJsonObject>
 
-ChatItem::ChatItem(const QString &name, const QString &lastMessage, const QString &chatId, QWidget *parent)
+ChatItem::ChatItem(const QString &chatName, QJsonObject &lastMessageObj, const QString &chatId, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChatItem)
 {
     ui->setupUi(this);
-    ui->labelName->setText(name);
-    ui->labelMessage->setText(lastMessage);
+    ui->ChatNameLabel->setText(chatName);
+    ui->userNameLabel->setText( (lastMessageObj.value("name").toString() != ""? lastMessageObj.value("name").toString() : "No message yet") );
+    ui->lastMessageLabel->setText(lastMessageObj.value("text").toString());
     this->chatId = chatId;
 }
 

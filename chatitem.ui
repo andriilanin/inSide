@@ -37,9 +37,12 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
    <property name="spacing">
     <number>0</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
    </property>
    <property name="leftMargin">
     <number>0</number>
@@ -54,11 +57,11 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="labelName">
+    <widget class="QLabel" name="ChatNameLabel">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
+       <verstretch>1</verstretch>
       </sizepolicy>
      </property>
      <property name="font">
@@ -72,10 +75,13 @@
       <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="text">
-      <string>name</string>
+      <string>chatName</string>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
+     </property>
+     <property name="indent">
+      <number>10</number>
      </property>
      <property name="textInteractionFlags">
       <set>Qt::TextInteractionFlag::NoTextInteraction</set>
@@ -83,28 +89,54 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="labelMessage">
+    <widget class="QLabel" name="userNameLabel">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>userName</string>
+     </property>
+     <property name="indent">
+      <number>20</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lastMessageLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>2</verstretch>
       </sizepolicy>
      </property>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
+       <italic>true</italic>
       </font>
      </property>
      <property name="frameShape">
       <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="text">
-      <string>message</string>
+      <string>lastMessage</string>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <property name="indent">
+      <number>20</number>
      </property>
     </widget>
    </item>
    <item>
     <widget class="Line" name="line">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>

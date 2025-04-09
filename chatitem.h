@@ -12,7 +12,7 @@ class ChatItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatItem(const QString &name, const QString &lastMessage, const QString &chatId, QWidget *parent = nullptr);
+    explicit ChatItem(const QString &chatName, QJsonObject &lastMessageObj, const QString &chatId, QWidget *parent = nullptr);
     ~ChatItem();
 
 protected:

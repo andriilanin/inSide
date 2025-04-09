@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "chatgui.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -15,12 +16,14 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
+    ~MainWindow();
+    void setCurrentChatGUIObj(QString chatId);
 protected:
-    void handleChatClicks(QString chatId);
+
 
 private:
+    ChatGUI* currentChatGUIObj = nullptr;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
