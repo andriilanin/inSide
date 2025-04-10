@@ -1,7 +1,6 @@
+
 #ifndef CHATDATABASE_H
 #define CHATDATABASE_H
-
-#pragma once
 
 #include <QObject>
 #include <QJsonObject>
@@ -9,7 +8,18 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QString>
-#include <QVariantMap>
+#include <QDateTime>
+
+struct ChatUser {
+    QString userName;
+    QString keySequence;
+};
+
+struct ChatMessage {
+    QString userName;
+    QString text;
+    QString time;
+};
 
 class ChatDatabase : public QObject
 {
@@ -24,14 +34,15 @@ public:
 
     QJsonArray getChats() const;
     QJsonObject getChatById(const QString& chatId) const;
-
-    bool addMessage(const QString& chatId, const QString& name, const QString& text);
-    bool createChat(const QString& chatId);
     bool chatExists(const QString& chatId) const;
 
+    bool createChat(const QString& chatId, const QString& chatName, const QList<ChatUser>& users);
+    bool addMessage(const QString& chatId, const ChatMessage& message);
+
 private:
-    const QString m_filePath = "C:/Users/whoami/Desktop/Projects/inSide/DB.json"; // C:/Users/whoami/Desktop/Projects/inSide/
+    QString m_filePath = "C:/Users/whoami/Desktop/Projects/inSide/DB.json";
     QJsonObject m_data;
 };
 
 #endif // CHATDATABASE_H
+

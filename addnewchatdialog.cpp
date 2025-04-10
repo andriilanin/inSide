@@ -15,6 +15,7 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
     this->DB = new ChatDatabase;
     DB->load();
     connect(ui->addChatButton, &QPushButton::clicked, this, &addNewChatDialog::addNewChatButtonPressed);
+
     for (int i = 0; i < 4; i++) {
         this->UsersLayouts.push_back(new QHBoxLayout);
         int userCount = UsersLayouts.size();

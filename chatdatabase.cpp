@@ -1,66 +1,36 @@
 #include "chatdatabase.h"
+#include <QDebug>
 
+ChatDatabase::ChatDatabase(QObject* parent) : QObject(parent) {}
 
-ChatDatabase::ChatDatabase(QObject* parent)
-    : QObject(parent)
-{
-}
+ChatDatabase::~ChatDatabase() {}
 
-ChatDatabase::~ChatDatabase()
-{
-}
-
-bool ChatDatabase::load()
-{
+bool ChatDatabase::load() {
     QFile file(m_filePath);
-
     if (!file.exists()) {
-        qWarning() << "Файл не найден, создаём новый:" << m_filePath;
-
-        // Создаём пустую структуру
-        m_data = QJsonObject{
-            { "chats", QJsonArray() }
-        };
-
-        return save(); // Сохраняем и возвращаем true
-    }
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Не удалось открыть файл:" << m_filePath;
-        return false;
-    }
-
-    QByteArray data = file.readAll();
-    file.close();
-
-    if (data.isEmpty()) {
-        qWarning() << "Файл пустой, инициализируем базу...";
-        m_data = QJsonObject{
-            { "chats", QJsonArray() }
-        };
+        m_data = { { "chats", QJsonArray() } };
         return save();
     }
 
-    QJsonParseError parseError;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+    if (!file.open(QIODevice::ReadOnly)) return false;
 
+    QByteArray rawData = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(rawData, &parseError);
     if (parseError.error != QJsonParseError::NoError) {
-        qWarning() << "Ошибка парсинга:" << parseError.errorString();
-        m_data = QJsonObject{
-            { "chats", QJsonArray() }
-        };
-        return save(); // Перезаписываем повреждённый файл
+        m_data = { { "chats", QJsonArray() } };
+        return save();
     }
 
     m_data = doc.object();
     return true;
 }
 
-bool ChatDatabase::save()
-{
+bool ChatDatabase::save() {
     QFile file(m_filePath);
-    if (!file.open(QIODevice::WriteOnly))
-        return false;
+    if (!file.open(QIODevice::WriteOnly)) return false;
 
     QJsonDocument doc(m_data);
     file.write(doc.toJson());
@@ -68,60 +38,59 @@ bool ChatDatabase::save()
     return true;
 }
 
-QJsonArray ChatDatabase::getChats() const
-{
+QJsonArray ChatDatabase::getChats() const {
     return m_data.value("chats").toArray();
 }
 
-QJsonObject ChatDatabase::getChatById(const QString& chatId) const
-{
-    QJsonArray chats = m_data.value("chats").toArray();
-    for (const QJsonValue& val : chats) {
-        if (!val.isObject()) continue;
-
+QJsonObject ChatDatabase::getChatById(const QString& chatId) const {
+    for (const QJsonValue& val : getChats()) {
         QJsonObject obj = val.toObject();
-        QString currentId = obj.value("chatId").toString();
-
-        if (currentId == chatId) {
+        if (obj["ChatId"].toString() == chatId)
             return obj;
-        }
     }
-    return QJsonObject(); // Пусто = не найден
+    return QJsonObject();
 }
 
-bool ChatDatabase::chatExists(const QString& chatId) const
-{
+bool ChatDatabase::chatExists(const QString& chatId) const {
     return !getChatById(chatId).isEmpty();
 }
 
-bool ChatDatabase::createChat(const QString& chatId)
-{
-    if (chatExists(chatId))
-        return false;
+bool ChatDatabase::createChat(const QString& chatId, const QString& chatName, const QList<ChatUser>& users) {
+    if (chatExists(chatId)) return false;
 
-    QJsonObject newChat;
-    newChat["chatId"] = chatId;
-    newChat["messages"] = QJsonArray();
+    QJsonArray usersArray;
+    for (const ChatUser& user : users) {
+        usersArray.append(QJsonObject{
+            { "UserName", user.userName },
+            { "KeySequence", user.keySequence }
+        });
+    }
+
+    QJsonObject chat {
+        { "ChatName", chatName },
+        { "ChatId", chatId },
+        { "Users", usersArray },
+        { "Messages", QJsonArray() }
+    };
 
     QJsonArray chats = getChats();
-    chats.append(newChat);
+    chats.append(chat);
     m_data["chats"] = chats;
-
     return save();
 }
 
-bool ChatDatabase::addMessage(const QString& chatId, const QString& name, const QString& text)
-{
+bool ChatDatabase::addMessage(const QString& chatId, const ChatMessage& message) {
     QJsonArray chats = getChats();
     for (int i = 0; i < chats.size(); ++i) {
         QJsonObject chat = chats[i].toObject();
-        if (chat.value("chatId").toString() == chatId) {
-            QJsonArray messages = chat["messages"].toArray();
-            QJsonObject msg;
-            msg["name"] = name;
-            msg["text"] = text;
-            messages.append(msg);
-            chat["messages"] = messages;
+        if (chat["ChatId"].toString() == chatId) {
+            QJsonArray messages = chat["Messages"].toArray();
+            messages.append(QJsonObject{
+                { "UserName", message.userName },
+                { "Text", message.text },
+                { "Time", message.time }
+            });
+            chat["Messages"] = messages;
             chats[i] = chat;
             m_data["chats"] = chats;
             return save();
