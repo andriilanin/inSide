@@ -2,8 +2,9 @@
 #define ADDNEWCHATDIALOG_H
 
 #include <QDialog>
+#include <QHBoxLayout>
 #include "chatdatabase.h"
-
+#include <vector>
 namespace Ui {
 class addNewChatDialog;
 }
@@ -21,6 +22,7 @@ private slots:
     void addNewChatButtonPressed();
 
 private:
+    std::vector<QHBoxLayout*> UsersLayouts;
     ChatDatabase* DB;
     Ui::addNewChatDialog *ui;
 };

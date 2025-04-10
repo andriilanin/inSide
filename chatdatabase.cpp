@@ -6,6 +6,10 @@ ChatDatabase::ChatDatabase(QObject* parent)
 {
 }
 
+ChatDatabase::~ChatDatabase()
+{
+}
+
 bool ChatDatabase::load()
 {
     QFile file(m_filePath);

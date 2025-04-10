@@ -17,6 +17,7 @@ class ChatDatabase : public QObject
 
 public:
     explicit ChatDatabase(QObject* parent = nullptr);
+    virtual ~ChatDatabase();
 
     bool load();
     bool save();
