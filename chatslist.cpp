@@ -3,6 +3,7 @@
 #include "chatitem.h"
 #include "chatdatabase.h"
 #include "mainwindow.h"
+#include "addnewchatdialog.h"
 #include <QPushButton>
 
 ChatsList::ChatsList(QWidget *parent)
@@ -44,5 +45,7 @@ void ChatsList::reloadChatsList() {
 };
 
 void ChatsList::addNewChatButtonPressed() {
-    qDebug() << "addNewChatButton pressed";
+    addNewChatDialog* dialog = new addNewChatDialog;
+    dialog->exec();
+    delete dialog;
 };

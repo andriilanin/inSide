@@ -2,6 +2,7 @@
 #define ADDNEWCHATDIALOG_H
 
 #include <QDialog>
+#include "chatdatabase.h"
 
 namespace Ui {
 class addNewChatDialog;
@@ -15,7 +16,12 @@ public:
     explicit addNewChatDialog(QWidget *parent = nullptr);
     ~addNewChatDialog();
 
+
+private slots:
+    void addNewChatButtonPressed();
+
 private:
+    ChatDatabase* DB;
     Ui::addNewChatDialog *ui;
 };
 
