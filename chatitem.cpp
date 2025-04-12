@@ -8,8 +8,8 @@ ChatItem::ChatItem(const QString &chatName, QJsonObject &lastMessageObj, const Q
 {
     ui->setupUi(this);
     ui->ChatNameLabel->setText(chatName);
-    ui->userNameLabel->setText( (lastMessageObj.value("name").toString() != ""? lastMessageObj.value("name").toString() : "No message yet") );
-    ui->lastMessageLabel->setText(lastMessageObj.value("text").toString());
+    ui->userNameLabel->setText( (lastMessageObj.value("UserName").toString() != ""? lastMessageObj.value("UserName").toString() : "No message yet") );
+    ui->lastMessageLabel->setText(lastMessageObj.value("Text").toString());
     this->chatId = chatId;
 }
 

@@ -9,7 +9,6 @@
 #include <QFile>
 #include <QString>
 #include <QDateTime>
-
 struct ChatUser {
     QString userName;
     QString keySequence;
@@ -37,6 +36,7 @@ public:
     bool chatExists(const QString& chatId) const;
 
     bool createChat(const QString& chatId, const QString& chatName, const QList<ChatUser>& users);
+    QString getUserNameByKeySequence(const QString& chatId, const QKeySequence& key) const;
     bool addMessage(const QString& chatId, const ChatMessage& message);
 
 private:

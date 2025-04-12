@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "chatgui.h"
+#include "chatslist.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,7 +21,7 @@ public:
     ~MainWindow();
     void setCurrentChatGUIObj(QString chatId);
 protected:
-
+    ChatsList* chatsList;
 
 private:
     ChatGUI* currentChatGUIObj = nullptr;

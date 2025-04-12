@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->ChatsListLayout->addWidget(new ChatsList(this));
+    this->chatsList = new ChatsList(this);
+    ui->ChatsListLayout->addWidget(this->chatsList);
 
-    // ui->currentChatLayout->addWidget(new ChatGUI("chat1"));
 }
 
 MainWindow::~MainWindow()
@@ -30,7 +30,10 @@ void MainWindow::setCurrentChatGUIObj(QString chatId) {
     if (this->currentChatGUIObj != nullptr) {
         delete currentChatGUIObj;
     };
-    this->currentChatGUIObj = new ChatGUI(chatId);
+    this->currentChatGUIObj = new ChatGUI(chatId, this);
     ui->currentChatLayout->addWidget(this->currentChatGUIObj);
+    connect(this->currentChatGUIObj, &ChatGUI::reloadChatsList, this->chatsList, [this]() {
+        this->chatsList->reloadChatsList();
+    });
 };
 

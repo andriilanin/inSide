@@ -15,7 +15,8 @@ SOURCES += \
     chatitem.cpp \
     chatslist.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    messageitem.cpp
 
 HEADERS += \
     addnewchatdialog.h \
@@ -23,14 +24,16 @@ HEADERS += \
     chatgui.h \
     chatitem.h \
     chatslist.h \
-    mainwindow.h
+    mainwindow.h \
+    messageitem.h
 
 FORMS += \
     addnewchatdialog.ui \
     chatgui.ui \
     chatitem.ui \
     chatslist.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    messageitem.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

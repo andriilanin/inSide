@@ -6,8 +6,9 @@
 #include "addnewchatdialog.h"
 #include <QPushButton>
 
-ChatsList::ChatsList(QWidget *parent)
+ChatsList::ChatsList(MainWindow *parent)
     : QWidget(parent)
+    , mainWindow(parent)
     , ui(new Ui::ChatsList)
 {
     ui->setupUi(this);
@@ -28,11 +29,14 @@ void ChatsList::reloadChatsList() {
     scrollLayout->setSpacing(5);
 
     if (DB->load()) {
-        for (const QJsonValue& chat : DB->getChats()) {
+        const QJsonArray  chats = DB->getChats();
+        for (const QJsonValue& chat : chats) {
             QJsonObject chatObj = chat.toObject();
-            QJsonObject lastMessage = chatObj.value("messages").toArray().last().toObject();
-            ChatItem* newChatItem= new ChatItem(chatObj.value("chatName").toString(), lastMessage, chatObj.value("chatId").toString());
-            connect(newChatItem, &ChatItem::clicked, qobject_cast<MainWindow*>(this->parent()), &MainWindow::setCurrentChatGUIObj);
+            QJsonObject lastMessage = chatObj.value("Messages").toArray().last().toObject();
+
+            ChatItem* newChatItem = new ChatItem(chatObj.value("ChatName").toString(), lastMessage, chatObj.value("ChatId").toString());
+            connect(newChatItem, &ChatItem::clicked, mainWindow, &MainWindow::setCurrentChatGUIObj);
+
             scrollLayout->addWidget(newChatItem);
         };
     }
@@ -48,4 +52,5 @@ void ChatsList::addNewChatButtonPressed() {
     addNewChatDialog* dialog = new addNewChatDialog;
     dialog->exec();
     delete dialog;
+    reloadChatsList();
 };

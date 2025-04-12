@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <chatdatabase.h>
+#include <QScrollArea>
+
 namespace Ui {
 class ChatGUI;
 }
@@ -20,6 +22,12 @@ public:
     QString getChatId();
     QString getChatName();
     void loadGuiByChatId();
+    void connectUsersKeySequences();
+    void reloadMessagesInChat();
+    void loadMessagesFromDBToArea();
+
+signals:
+    void reloadChatsList();
 
 private:
     QString chatId;

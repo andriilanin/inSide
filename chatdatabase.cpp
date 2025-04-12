@@ -1,6 +1,6 @@
 #include "chatdatabase.h"
 #include <QDebug>
-
+#include <QKeySequence>
 ChatDatabase::ChatDatabase(QObject* parent) : QObject(parent) {}
 
 ChatDatabase::~ChatDatabase() {}
@@ -77,6 +77,24 @@ bool ChatDatabase::createChat(const QString& chatId, const QString& chatName, co
     chats.append(chat);
     m_data["chats"] = chats;
     return save();
+}
+
+QString ChatDatabase::getUserNameByKeySequence(const QString& chatId, const QKeySequence& key) const
+{
+    QJsonObject chat = getChatById(chatId);
+    if (chat.isEmpty()) return QString();
+
+    QJsonArray users = chat.value("Users").toArray();
+    QString keyStr = key.toString(QKeySequence::PortableText);
+
+    for (const QJsonValue& userVal : users) {
+        QJsonObject userObj = userVal.toObject();
+        if (userObj.value("KeySequence").toString() == keyStr) {
+            return userObj.value("UserName").toString();
+        }
+    }
+
+    return QString(); // Не найден
 }
 
 bool ChatDatabase::addMessage(const QString& chatId, const ChatMessage& message) {

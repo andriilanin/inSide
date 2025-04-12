@@ -1,5 +1,6 @@
 #include "addnewchatdialog.h"
 #include "ui_addnewchatdialog.h"
+#include <QRandomGenerator>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QKeySequenceEdit>
@@ -31,7 +32,6 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
         this->UsersLayouts[userCount-1]->addWidget(NUserKeySequence);
 
         ui->UsersLayout->addLayout(this->UsersLayouts[userCount-1]);
-
     };
 }
 
@@ -44,7 +44,16 @@ addNewChatDialog::~addNewChatDialog()
 
 void addNewChatDialog::addNewChatButtonPressed() {
     if (ui->NewChatNameInput->text() != "") {
-        // DB->createChat(chatId, chatName, users:shortcuts)
+        QList<ChatUser> usersToAdd;
+
+        for (QHBoxLayout* UL : UsersLayouts) {
+            QString UserName = qobject_cast<QLineEdit*>(UL->itemAt(1)->widget())->text();
+            if (UserName != "") {
+                QString UserKeySequence = qobject_cast<QKeySequenceEdit*>(UL->itemAt(2)->widget())->keySequence().toString();
+                usersToAdd.push_back({UserName, UserKeySequence});
+            };
+        }
+        DB->createChat(QString::number(QRandomGenerator::global()->bounded(100000, 999999)), ui->NewChatNameInput->text(), usersToAdd);
     };
     close();
 }
