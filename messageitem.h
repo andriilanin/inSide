@@ -12,9 +12,9 @@ class MessageItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit MessageItem(QWidget *parent = nullptr, QString text = "", QString userName = "None", bool isOutGoing = false);
+    explicit MessageItem(QWidget *parent = nullptr, QString text = "", QString userName = "None", bool isOutGoing = false, bool isSameUserName = false);
     ~MessageItem();
-
+    QString getName();
 private:
     Ui::MessageItem *ui;
 };

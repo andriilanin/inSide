@@ -14,6 +14,7 @@ SOURCES += \
     chatgui.cpp \
     chatitem.cpp \
     chatslist.cpp \
+    inputtextedit.cpp \
     main.cpp \
     mainwindow.cpp \
     messageitem.cpp
@@ -24,6 +25,7 @@ HEADERS += \
     chatgui.h \
     chatitem.h \
     chatslist.h \
+    inputtextedit.h \
     mainwindow.h \
     messageitem.h
 

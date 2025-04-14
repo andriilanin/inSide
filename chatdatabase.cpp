@@ -43,7 +43,8 @@ QJsonArray ChatDatabase::getChats() const {
 }
 
 QJsonObject ChatDatabase::getChatById(const QString& chatId) const {
-    for (const QJsonValue& val : getChats()) {
+    const QJsonArray chats = getChats();
+    for (const QJsonValue& val : chats) {
         QJsonObject obj = val.toObject();
         if (obj["ChatId"].toString() == chatId)
             return obj;
@@ -84,7 +85,7 @@ QString ChatDatabase::getUserNameByKeySequence(const QString& chatId, const QKey
     QJsonObject chat = getChatById(chatId);
     if (chat.isEmpty()) return QString();
 
-    QJsonArray users = chat.value("Users").toArray();
+    const QJsonArray users = chat.value("Users").toArray();
     QString keyStr = key.toString(QKeySequence::PortableText);
 
     for (const QJsonValue& userVal : users) {

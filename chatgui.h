@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <chatdatabase.h>
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include <inputtextedit.h>
 
 namespace Ui {
 class ChatGUI;
@@ -25,13 +27,16 @@ public:
     void connectUsersKeySequences();
     void reloadMessagesInChat();
     void loadMessagesFromDBToArea();
+    void addNewMessageToArea(const ChatMessage& message);
 
 signals:
     void reloadChatsList();
 
 private:
+    InputTextEdit* inputTextEdit = nullptr;
     QString chatId;
     QString chatName;
+    QVBoxLayout* messageLayout = nullptr;
 
     Ui::ChatGUI *ui;
 };
