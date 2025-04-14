@@ -2,6 +2,8 @@
 #define CHATITEM_H
 
 #include <QWidget>
+#include <QEvent>
+#include <QResizeEvent>
 
 namespace Ui {
 class ChatItem;
@@ -16,7 +18,11 @@ public:
     ~ChatItem();
 
 protected:
+
     void mousePressEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
+    void enterEvent(QEnterEvent* event) override;
+    void leaveEvent(QEvent* event) override;
 
 
 signals:
@@ -24,6 +30,7 @@ signals:
 
 
 private:
+    std::function<void()> callback;
     QString chatId;
     Ui::ChatItem *ui;
 };

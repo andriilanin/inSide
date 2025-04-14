@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>734</width>
-    <height>399</height>
+    <width>578</width>
+    <height>308</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background: rgb(24,36,44);</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
@@ -48,7 +51,7 @@
       </spacer>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="inputsLayout" stretch="1,1,0,0,10,0,0,0">
+      <layout class="QVBoxLayout" name="inputsLayout" stretch="1,1,0,0,0,10,0,0,0">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -87,9 +90,29 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="NewChatNameInput"/>
+          <widget class="QLineEdit" name="NewChatNameInput">
+           <property name="styleSheet">
+            <string notr="true">background: rgb(14,22,33);</string>
+           </property>
+          </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="QLabel" name="UsersLabel">
@@ -141,6 +164,12 @@
         <widget class="QPushButton" name="addChatButton">
          <property name="text">
           <string>add chat</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

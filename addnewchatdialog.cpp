@@ -7,6 +7,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <vector>
+#define DEFAULT_STYLE "background: rgb(14,22,33);}"
+
 
 addNewChatDialog::addNewChatDialog(QWidget *parent)
     : QDialog(parent)
@@ -25,9 +27,11 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
 
         QLineEdit* NUserName = new QLineEdit(this);
         NUserName->setPlaceholderText("Leave if dont want that one new user");
+        NUserName->setStyleSheet(DEFAULT_STYLE);
         this->UsersLayouts[userCount-1]->addWidget(NUserName);
 
         QKeySequenceEdit* NUserKeySequence = new QKeySequenceEdit(this);
+        NUserKeySequence->setStyleSheet(DEFAULT_STYLE);
         NUserKeySequence->setMaximumSequenceLength(1);
         this->UsersLayouts[userCount-1]->addWidget(NUserKeySequence);
 

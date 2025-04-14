@@ -26,7 +26,6 @@ ChatsList::~ChatsList()
 void ChatsList::reloadChatsList() {
     QWidget *scrollContent = new QWidget;
     QVBoxLayout* scrollLayout = new QVBoxLayout(scrollContent);
-    scrollLayout->setSpacing(5);
 
     if (DB->load()) {
         const QJsonArray  chats = DB->getChats();
