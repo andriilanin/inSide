@@ -15,7 +15,7 @@ class ChatItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatItem(const QString &chatName, QJsonObject &lastMessageObj, int ChatsListwidth, const QString &chatId, QWidget *parent);
+    explicit ChatItem( QWidget *parent, const QString &chatName, QJsonObject &lastMessageObj, int ChatsListwidth, const QString &chatId );
     ~ChatItem();
     void elideTextByWidth(QResizeEvent* event);
 
@@ -26,7 +26,7 @@ protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
     void enterEvent(QEnterEvent* event) override;
     void leaveEvent(QEvent* event) override;
-
+    void applyElide(int width);
 
 signals:
     void clicked(QString clickedChatId);

@@ -17,35 +17,38 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Add new chat");
     this->DB = new ChatDatabase;
-    DB->load();
+    this->DB->load();
+
+    connect(ui->AddNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::addNewUserArea);
     connect(ui->addChatButton, &QPushButton::clicked, this, &addNewChatDialog::addNewChatButtonPressed);
+    addNewUserArea();
 
-    for (int i = 0; i < 8; i++) {
-        this->UsersLayouts.push_back(new QHBoxLayout);
-        int userCount = UsersLayouts.size();
-
-        this->UsersLayouts[userCount-1]->addWidget(new QLabel(QString::number(userCount)+".", this));
-
-        QLineEdit* NUserName = new QLineEdit(this);
-        NUserName->setPlaceholderText("Leave if dont want that one new user");
-        NUserName->setStyleSheet(DEFAULT_STYLE);
-        this->UsersLayouts[userCount-1]->addWidget(NUserName);
-
-        QKeySequenceEdit* NUserKeySequence = new QKeySequenceEdit(this);
-        NUserKeySequence->setStyleSheet(DEFAULT_STYLE);
-        NUserKeySequence->setMaximumSequenceLength(1);
-        this->UsersLayouts[userCount-1]->addWidget(NUserKeySequence);
-
-        ui->UsersLayout->addLayout(this->UsersLayouts[userCount-1]);
-    };
 }
 
 addNewChatDialog::~addNewChatDialog()
 {
-    qDebug() << "clsoed";
     delete this->DB;
     delete ui;
 }
+
+void addNewChatDialog::addNewUserArea() {
+    this->UsersLayouts.push_back(new QHBoxLayout);
+    int userCount = UsersLayouts.size();
+
+    this->UsersLayouts[userCount-1]->addWidget(new QLabel(QString::number(userCount)+".", this));
+
+    QLineEdit* NUserName = new QLineEdit(this);
+    NUserName->setPlaceholderText("Leave if dont want that one new user");
+    NUserName->setStyleSheet(DEFAULT_STYLE);
+    this->UsersLayouts[userCount-1]->addWidget(NUserName);
+
+    QKeySequenceEdit* NUserKeySequence = new QKeySequenceEdit(this);
+    NUserKeySequence->setStyleSheet(DEFAULT_STYLE);
+    NUserKeySequence->setMaximumSequenceLength(1);
+    this->UsersLayouts[userCount-1]->addWidget(NUserKeySequence);
+
+    ui->UsersLayout->insertLayout(ui->UsersLayout->count()-2,this->UsersLayouts[userCount-1]);
+};
 
 void addNewChatDialog::addNewChatButtonPressed() {
     if (ui->NewChatNameInput->text() != "") {

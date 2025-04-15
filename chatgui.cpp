@@ -29,6 +29,27 @@ ChatGUI::~ChatGUI()
     delete ui;
 }
 
+void ChatGUI::setChatId(const QString chatId){
+    this->chatId = chatId;
+};
+
+void ChatGUI::loadGuiByChatId() {
+    DB->load();
+    ui->labelName->setText(DB->getChatById(this->chatId).value("ChatName").toString());
+
+    this->inputTextEdit = new InputTextEdit(this);
+    this->inputTextEdit->setPlaceholderText("Write a message...");
+    ui->inputTextEditLayout->addWidget(this->inputTextEdit);
+
+    connectUsersKeySequences();
+    loadMessagesFromDBToArea();
+};
+
+void ChatGUI::KeySequenceInfoDialogShow() {
+    KeySequenceInfoDialog* KSID = new KeySequenceInfoDialog(this, getChatId());
+    KSID->show();
+};
+
 void ChatGUI::deleteChatDialogExec() {
     deleteChatConfirm* DCC = new deleteChatConfirm(this, getChatId());
     connect(DCC, &deleteChatConfirm::confirmSignal, this, [this](){
@@ -38,40 +59,58 @@ void ChatGUI::deleteChatDialogExec() {
     emit reloadChatsList();
 }
 
-void ChatGUI::KeySequenceInfoDialogShow() {
-    KeySequenceInfoDialog* KSID = new KeySequenceInfoDialog(this, getChatId());
-    KSID->show();
-};
+void ChatGUI::connectUsersKeySequences() {
 
-void ChatGUI::setChatId(const QString chatId){
-    this->chatId = chatId;
-};
+    QJsonArray usersArray = DB->getChatById(this->chatId).value("Users").toArray();
+    for (const QJsonValueRef& user : usersArray) {
+        QJsonObject userObj = user.toObject();
 
+        QKeySequence* userKeySequence = new QKeySequence(userObj.value("KeySequence").toString());
+        QShortcut* runtimeShortcut = new QShortcut(*userKeySequence, this);
 
+        connect(runtimeShortcut, &QShortcut::activated, this, [=]() {
+            QString inputText = this->inputTextEdit->toPlainText();
+            if (!inputText.trimmed().isEmpty()) {
+                QString userName = DB->getUserNameByKeySequence(this->getChatId(), *userKeySequence);
+                ChatMessage msg = { userName, inputText, QDateTime::currentDateTime().toString(Qt::ISODate) };
 
-void ChatGUI::loadGuiByChatId() {
-    DB->load();
-    ui->labelName->setText(DB->getChatById(this->chatId).value("ChatName").toString());
-    this->inputTextEdit = new InputTextEdit(this);
-    this->inputTextEdit->setPlaceholderText("Write a message...");
-    ui->inputTextEditLayout->addWidget(this->inputTextEdit);
-    connectUsersKeySequences();
-    loadMessagesFromDBToArea();
-};
+                DB->addMessage(this->getChatId(), msg);
+                addNewMessageToArea(msg);
+
+                this->inputTextEdit->clear();
+                emit reloadChatsList();
+            }
+        });
+    }
+
+    connect(this->inputTextEdit, &InputTextEdit::enterPressed, this, [=]() {
+        QString inputText = this->inputTextEdit->toPlainText();
+        if (inputText != ""){
+            ChatMessage msg = { "You", inputText, QDateTime::currentDateTime().toString(Qt::ISODate) };
+
+            DB->addMessage(this->getChatId(), msg);
+            addNewMessageToArea(msg);
+
+            this->inputTextEdit->clear();
+            emit reloadChatsList();
+        }
+    });
+}
 
 void ChatGUI::addNewMessageToArea(const ChatMessage& message) {
-    bool isOutGoing = message.userName=="You";
+    bool isOutGoing(message.userName=="You");
 
     MessageItem* lastMessageItem = qobject_cast<MessageItem*>(messageLayout->itemAt(messageLayout->count() - 1)->widget());
     bool isSameUserName = false;
+
     if (lastMessageItem) {
         QString lastMessageUserName = lastMessageItem->getName();
         isSameUserName = message.userName == lastMessageUserName;
     }
     if (this->messageLayout) {
-        this->messageLayout->addWidget(new MessageItem(this, message.text, message.userName, isOutGoing, isSameUserName), 0, isOutGoing ? Qt::AlignRight : Qt::AlignLeft);
+        MessageItem* newMessageItem = new MessageItem(this, message.text, message.userName, isOutGoing, isSameUserName);
+        this->messageLayout->addWidget(newMessageItem, 0, (isOutGoing ? Qt::AlignRight : Qt::AlignLeft));
     }
-
 
     QTimer::singleShot(0, this, [this]() {
         qApp->processEvents();
@@ -83,73 +122,25 @@ void ChatGUI::addNewMessageToArea(const ChatMessage& message) {
 
 void ChatGUI::loadMessagesFromDBToArea() {
 
-    QWidget *scrollContent = new QWidget;
-    QVBoxLayout* scrollVLayout = new QVBoxLayout(scrollContent);
-    scrollVLayout->setSpacing(4);
+    QWidget* messagesScrollContent = new QWidget();
+    this->messageLayout = new QVBoxLayout(messagesScrollContent);
+    this->messageLayout->setSpacing(4);
+    this->messageLayout->setContentsMargins(10, 10, 10, 10);
+    this->messageLayout->insertStretch(0);
 
-    scrollVLayout->setContentsMargins(10, 10, 10, 10);
-
-    scrollVLayout->insertStretch(0);
-    scrollContent->setLayout(scrollVLayout);
-    ui->MessagesArea->setWidget(scrollContent);
-
-    this->messageLayout = scrollVLayout;
-
+    messagesScrollContent->setLayout(this->messageLayout);
+    ui->MessagesArea->setWidget(messagesScrollContent);
 
     if (DB->load()) {
-        const QJsonArray* messagesArray = new QJsonArray(DB->getChatById(this->getChatId()).value("Messages").toArray());
-        for (const QJsonValue& message : *messagesArray) {
+        QJsonArray messagesArray = DB->getChatById(this->getChatId()).value("Messages").toArray();
+        for (const QJsonValueRef& message : messagesArray) {
             QJsonObject messageObj = message.toObject();
 
             ChatMessage msg = {messageObj.value("UserName").toString(), messageObj.value("Text").toString(), messageObj.value("Time").toString() };
             addNewMessageToArea(msg);
-
-
         };
-        delete messagesArray;
-    }
-
-
-
-}
-
-void ChatGUI::connectUsersKeySequences() {
-
-    const QJsonArray usersArray = DB->getChatById(this->chatId).value("Users").toArray();
-    for (const QJsonValue& user : usersArray) {
-        QJsonObject userObj = user.toObject();
-
-        QKeySequence* userKeySequence = new QKeySequence(userObj.value("KeySequence").toString());
-        QShortcut* runtimeShortcut = new QShortcut(*userKeySequence, this);
-
-        connect(runtimeShortcut, &QShortcut::activated, this, [=]() {
-
-            QString inputText = this->inputTextEdit->toPlainText();
-            if (!inputText.trimmed().isEmpty()) {
-                ChatMessage msg = { DB->getUserNameByKeySequence(this->getChatId(), *userKeySequence), inputText, QDateTime::currentDateTime().toString(Qt::ISODate) };
-                addNewMessageToArea(msg);
-                DB->addMessage(this->getChatId(), msg);
-                this->inputTextEdit->clear();
-                emit reloadChatsList();
-            }
-        });
-    }
-    connect(this->inputTextEdit, &InputTextEdit::enterPressed, this, [=]() {
-        QString inputText = this->inputTextEdit->toPlainText();
-        if (inputText != ""){
-            ChatMessage msg = { "You", inputText, QDateTime::currentDateTime().toString(Qt::ISODate) };
-            addNewMessageToArea(msg);
-            DB->addMessage(this->getChatId(), msg);
-            this->inputTextEdit->clear();
-            emit reloadChatsList();
-        }
-
-    });
-}
-
-
-
-
+    };
+};
 
 QString ChatGUI::getChatId(){
     return this->chatId;

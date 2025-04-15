@@ -38,7 +38,7 @@
       <number>0</number>
      </property>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="SPACER_5">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
@@ -59,7 +59,7 @@
         <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
        </property>
        <item>
-        <spacer name="verticalSpacer_3">
+        <spacer name="SPACER_4">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -99,7 +99,7 @@
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacer_4">
+        <spacer name="SPACER_2">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -122,7 +122,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="SPACER">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -145,12 +145,50 @@
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
          </property>
+         <item>
+          <widget class="QPushButton" name="AddNewUserAreaButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </item>
        <item>
         <spacer name="inputsSpacer">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -165,6 +203,9 @@
          <property name="text">
           <string>add chat</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
          <property name="default">
           <bool>false</bool>
          </property>
@@ -174,9 +215,12 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_2">
+        <spacer name="SPACER_3">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -189,7 +233,7 @@
       </layout>
      </item>
      <item>
-      <spacer name="horizontalSpacer_2">
+      <spacer name="SPACER_6">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
