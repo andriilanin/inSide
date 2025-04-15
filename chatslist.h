@@ -20,10 +20,14 @@ public:
     void reloadChatsList();
 
 protected:
+    void resizeEvent(QResizeEvent* event) override;
     void handleChatClicks(QString chatId);
 
+signals:
+    void resized(QResizeEvent* event);
 
 private slots:
+
     void addNewChatButtonPressed();
 
 private:

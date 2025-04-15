@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <vector>
-#define DEFAULT_STYLE "background: rgb(14,22,33);}"
+#define DEFAULT_STYLE "background: rgb(14,22,33);"
 
 
 addNewChatDialog::addNewChatDialog(QWidget *parent)
@@ -15,11 +15,12 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
     , ui(new Ui::addNewChatDialog)
 {
     ui->setupUi(this);
+    setWindowTitle("Add new chat");
     this->DB = new ChatDatabase;
     DB->load();
     connect(ui->addChatButton, &QPushButton::clicked, this, &addNewChatDialog::addNewChatButtonPressed);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
         this->UsersLayouts.push_back(new QHBoxLayout);
         int userCount = UsersLayouts.size();
 

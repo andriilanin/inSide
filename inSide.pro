@@ -14,7 +14,9 @@ SOURCES += \
     chatgui.cpp \
     chatitem.cpp \
     chatslist.cpp \
+    deletechatconfirm.cpp \
     inputtextedit.cpp \
+    keysequenceinfodialog.cpp \
     main.cpp \
     mainwindow.cpp \
     messageitem.cpp
@@ -25,7 +27,9 @@ HEADERS += \
     chatgui.h \
     chatitem.h \
     chatslist.h \
+    deletechatconfirm.h \
     inputtextedit.h \
+    keysequenceinfodialog.h \
     mainwindow.h \
     messageitem.h
 
@@ -34,6 +38,8 @@ FORMS += \
     chatgui.ui \
     chatitem.ui \
     chatslist.ui \
+    deletechatconfirm.ui \
+    keysequenceinfodialog.ui \
     mainwindow.ui \
     messageitem.ui
 

@@ -6,6 +6,8 @@
 #include <QShortcut>
 #include "messageitem.h"
 #include "inputtextedit.h"
+#include "keysequenceinfodialog.h"
+#include "deletechatconfirm.h"
 #include <QSpacerItem>
 #include <QScrollBar>
 #include <QTimer>
@@ -18,6 +20,8 @@ ChatGUI::ChatGUI(const QString chatId, QWidget *parent)
     this->setChatId(chatId);
     this->DB = new ChatDatabase();
     loadGuiByChatId();
+    connect(ui->KeySequenceInfo, &QPushButton::clicked, this, &ChatGUI::KeySequenceInfoDialogShow);
+    connect(ui->deleteChatButton, &QPushButton::clicked, this, &ChatGUI::deleteChatDialogExec);
 }
 
 ChatGUI::~ChatGUI()
@@ -25,7 +29,19 @@ ChatGUI::~ChatGUI()
     delete ui;
 }
 
+void ChatGUI::deleteChatDialogExec() {
+    deleteChatConfirm* DCC = new deleteChatConfirm(this, getChatId());
+    connect(DCC, &deleteChatConfirm::confirmSignal, this, [this](){
+        this->close();
+    });
+    DCC->exec();
+    emit reloadChatsList();
+}
 
+void ChatGUI::KeySequenceInfoDialogShow() {
+    KeySequenceInfoDialog* KSID = new KeySequenceInfoDialog(this, getChatId());
+    KSID->show();
+};
 
 void ChatGUI::setChatId(const QString chatId){
     this->chatId = chatId;
@@ -37,6 +53,7 @@ void ChatGUI::loadGuiByChatId() {
     DB->load();
     ui->labelName->setText(DB->getChatById(this->chatId).value("ChatName").toString());
     this->inputTextEdit = new InputTextEdit(this);
+    this->inputTextEdit->setPlaceholderText("Write a message...");
     ui->inputTextEditLayout->addWidget(this->inputTextEdit);
     connectUsersKeySequences();
     loadMessagesFromDBToArea();

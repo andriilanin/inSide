@@ -29,6 +29,9 @@ public:
     void loadMessagesFromDBToArea();
     void addNewMessageToArea(const ChatMessage& message);
 
+    void KeySequenceInfoDialogShow();
+    void deleteChatDialogExec();
+
 signals:
     void reloadChatsList();
 

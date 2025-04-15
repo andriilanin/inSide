@@ -98,6 +98,27 @@ QString ChatDatabase::getUserNameByKeySequence(const QString& chatId, const QKey
     return QString(); // Не найден
 }
 
+bool ChatDatabase::deleteChatById(const QString& chatId) {
+    QJsonArray chats = getChats();
+    bool removed = false;
+
+    for (int i = 0; i < chats.size(); ++i) {
+        QJsonObject chat = chats[i].toObject();
+        if (chat["ChatId"].toString() == chatId) {
+            chats.removeAt(i);
+            removed = true;
+            break;
+        }
+    }
+
+    if (removed) {
+        m_data["chats"] = chats;
+        return save();
+    }
+
+    return false; // Not found
+}
+
 bool ChatDatabase::addMessage(const QString& chatId, const ChatMessage& message) {
     QJsonArray chats = getChats();
     for (int i = 0; i < chats.size(); ++i) {

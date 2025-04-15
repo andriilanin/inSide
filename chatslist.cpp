@@ -23,6 +23,10 @@ ChatsList::~ChatsList()
     delete ui;
 }
 
+void ChatsList::resizeEvent(QResizeEvent* event) {
+    emit resized(event);
+}
+
 void ChatsList::reloadChatsList() {
     QWidget *scrollContent = new QWidget;
     QVBoxLayout* scrollLayout = new QVBoxLayout(scrollContent);
@@ -33,7 +37,10 @@ void ChatsList::reloadChatsList() {
             QJsonObject chatObj = chat.toObject();
             QJsonObject lastMessage = chatObj.value("Messages").toArray().last().toObject();
 
-            ChatItem* newChatItem = new ChatItem(chatObj.value("ChatName").toString(), lastMessage, chatObj.value("ChatId").toString());
+            ChatItem* newChatItem = new ChatItem(chatObj.value("ChatName").toString(), lastMessage, this->size().width()-25, chatObj.value("ChatId").toString(), this);
+            connect(this, &ChatsList::resized, newChatItem, [newChatItem](QResizeEvent *event) {
+                newChatItem->elideTextByWidth(event);
+            });
             connect(newChatItem, &ChatItem::clicked, mainWindow, &MainWindow::setCurrentChatGUIObj);
 
             scrollLayout->addWidget(newChatItem);

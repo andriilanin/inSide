@@ -37,6 +37,7 @@ public:
 
     bool createChat(const QString& chatId, const QString& chatName, const QList<ChatUser>& users);
     QString getUserNameByKeySequence(const QString& chatId, const QKeySequence& key) const;
+    bool deleteChatById(const QString& chatId);
     bool addMessage(const QString& chatId, const ChatMessage& message);
 
 private:

@@ -21,6 +21,7 @@ public:
     ~MainWindow();
     void setCurrentChatGUIObj(QString chatId);
 protected:
+
     ChatsList* chatsList;
 
 private:

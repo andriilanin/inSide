@@ -25,6 +25,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+
 void MainWindow::setCurrentChatGUIObj(QString chatId) {
     ui->selectChatLabel->hide();
     if (this->currentChatGUIObj != nullptr) {
