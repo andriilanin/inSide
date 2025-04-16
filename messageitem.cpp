@@ -19,42 +19,64 @@ QString splitLongWords(const QString& text, int maxLength = 50)
 }
 
 
+QString wrapText(const QString& text, int maxLineLength) {
+    QStringList lines;
+    QString currentLine;
+
+    for (const QChar& ch : text) {
+        if (ch == '\n' || currentLine.length() >= maxLineLength) {
+            lines.append(currentLine.trimmed());
+            currentLine.clear();
+        }
+        if (ch != '\n') currentLine += ch;
+    }
+
+    if (!currentLine.isEmpty()) {
+        lines.append(currentLine.trimmed());
+    }
+
+    return lines.join("\n");
+}
+
 MessageItem::MessageItem(QWidget *parent, QString text, QString userName, bool isOutGoing, bool isSameUserName)
     : QWidget(parent)
     , ui(new Ui::MessageItem)
 {
 
     ui->setupUi(this);
-    ui->messageText->setMaximumWidth(400);
 
-    QString style = "color: rgb(228, 236, 242);\nborder-top-left-radius: 10px;\nborder-top-right-radius: 10px;\n";
+
+
 
     if (isSameUserName || userName == "You") {
         ui->userName->hide();
     };
 
+
+    QString style = "color: rgb(228, 236, 242);\nborder-top-left-radius: 10px;\nborder-top-right-radius: 10px;\n";
     if (userName != "You") {
         style += "background: rgb(24,37,51);";
         ui->userName->setText(userName);
         ui->userName->setStyleSheet("color: rgb(179,140,208);\n");
 
-    }if (userName == "You") {
+    } else {
         style += "background: rgb(43, 82, 120);";
     };
 
 
 
-    ui->messageText->setText(splitLongWords(text));
 
     if (isOutGoing) {
         style += "border-bottom-left-radius: 10px;\n";
     } else {
         style += "border-bottom-right-radius: 10px;\n";
     };
-    ui->messageWidget->setStyleSheet(style);
-    ui->messageWidget->adjustSize();
-    ui->messageWidget->setFixedWidth(ui->messageWidget->width());
+
+        ui->messageText->setText(wrapText(text, 72));
+        ui->messageWidget->setStyleSheet(style);
 }
+
+
 
 MessageItem::~MessageItem()
 {

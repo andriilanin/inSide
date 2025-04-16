@@ -15,6 +15,10 @@ public:
     explicit MessageItem(QWidget *parent = nullptr, QString text = "", QString userName = "None", bool isOutGoing = false, bool isSameUserName = false);
     ~MessageItem();
     QString getName();
+
+protected:
+
+
 private:
     Ui::MessageItem *ui;
 };
