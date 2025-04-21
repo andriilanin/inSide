@@ -41,7 +41,7 @@ public:
     bool addMessage(const QString& chatId, const ChatMessage& message);
 
 private:
-    QString m_filePath = "C:/Users/whoami/Desktop/Projects/inSide/DB.json";
+    QString m_filePath = "DB.json";
     QJsonObject m_data;
 };
 

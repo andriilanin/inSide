@@ -34,6 +34,7 @@ public:
 
 signals:
     void reloadChatsList();
+    void chatClosed();
 
 private:
     InputTextEdit* inputTextEdit = nullptr;

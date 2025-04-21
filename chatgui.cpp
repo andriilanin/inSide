@@ -26,6 +26,7 @@ ChatGUI::ChatGUI(const QString chatId, QWidget *parent)
 
 ChatGUI::~ChatGUI()
 {
+    emit chatClosed();
     delete ui;
 }
 
@@ -53,10 +54,11 @@ void ChatGUI::KeySequenceInfoDialogShow() {
 void ChatGUI::deleteChatDialogExec() {
     deleteChatConfirm* DCC = new deleteChatConfirm(this, getChatId());
     connect(DCC, &deleteChatConfirm::confirmSignal, this, [this](){
+        emit reloadChatsList();
+        emit chatClosed();
         this->close();
     });
     DCC->exec();
-    emit reloadChatsList();
 }
 
 void ChatGUI::connectUsersKeySequences() {

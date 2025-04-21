@@ -29,7 +29,7 @@ MainWindow::~MainWindow()
 
 
 void MainWindow::setCurrentChatGUIObj(QString chatId) {
-    ui->selectChatLabel->hide();
+
     if (this->currentChatGUIObj != nullptr) {
         delete currentChatGUIObj;
     };
@@ -38,5 +38,10 @@ void MainWindow::setCurrentChatGUIObj(QString chatId) {
     connect(this->currentChatGUIObj, &ChatGUI::reloadChatsList, this->chatsList, [this]() {
         this->chatsList->reloadChatsList();
     });
+    ui->selectChatLabel->hide();
+    connect(this->currentChatGUIObj, &ChatGUI::chatClosed, this, [this](){
+        ui->selectChatLabel->show();
+    });
+
 };
 
