@@ -95,7 +95,7 @@ QString ChatDatabase::getUserNameByKeySequence(const QString& chatId, const QKey
         }
     }
 
-    return QString(); // Не найден
+    return QString();
 }
 
 bool ChatDatabase::deleteChatById(const QString& chatId) {
@@ -116,7 +116,7 @@ bool ChatDatabase::deleteChatById(const QString& chatId) {
         return save();
     }
 
-    return false; // Not found
+    return false;
 }
 
 bool ChatDatabase::addMessage(const QString& chatId, const ChatMessage& message) {

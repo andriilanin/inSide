@@ -11,7 +11,7 @@ public:
     explicit InputTextEdit(QWidget* parent = nullptr);
     using QTextEdit::QTextEdit;
 signals:
-    void enterPressed(); // Сигнал для отправки сообщения
+    void enterPressed();
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
