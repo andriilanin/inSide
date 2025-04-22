@@ -40,7 +40,6 @@ Especially useful before:
 
 ## 🚀 Future Plans
 
-- Ability to save and load sessions
 - Progress tracking and statistics
 - Random question generation by topic (e.g. interview, conflict, relationships)
 - AI-based automatic dialogue generation
