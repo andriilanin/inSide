@@ -22,7 +22,8 @@ private slots:
     void addNewChatButtonPressed();
 
 protected:
-    void addNewUserArea ();
+    void addNewUserArea();
+    void deleteNewUserArea();
 
 private:
     std::vector<QHBoxLayout*> UsersLayouts;

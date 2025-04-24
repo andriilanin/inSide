@@ -20,7 +20,9 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
     this->DB->load();
 
     connect(ui->AddNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::addNewUserArea);
+    connect(ui->DeleteNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::deleteNewUserArea);
     connect(ui->addChatButton, &QPushButton::clicked, this, &addNewChatDialog::addNewChatButtonPressed);
+
     addNewUserArea();
 
 }
@@ -38,7 +40,7 @@ void addNewChatDialog::addNewUserArea() {
     this->UsersLayouts[userCount-1]->addWidget(new QLabel(QString::number(userCount)+".", this));
 
     QLineEdit* NUserName = new QLineEdit(this);
-    NUserName->setPlaceholderText("Leave if dont want that one new user");
+    NUserName->setPlaceholderText("Enter new user name");
     NUserName->setStyleSheet(DEFAULT_STYLE);
     this->UsersLayouts[userCount-1]->addWidget(NUserName);
 
@@ -49,6 +51,24 @@ void addNewChatDialog::addNewUserArea() {
 
     ui->UsersLayout->insertLayout(ui->UsersLayout->count()-2,this->UsersLayouts[userCount-1]);
 };
+
+void addNewChatDialog::deleteNewUserArea() {
+    if (this->UsersLayouts.size() != 0) {
+        QLayoutItem* item = ui->UsersLayout->takeAt(ui->UsersLayout->count()-3);
+        QLayout* childLayout = item->layout();
+        if (childLayout) {
+            this->UsersLayouts.pop_back();
+            while (QLayoutItem* childItem = childLayout->takeAt(0)) {
+                if (QWidget* widget = childItem->widget()) {
+                    widget->setParent(nullptr);
+                    widget->deleteLater();
+                }
+                delete childItem;
+            }
+            delete childLayout;
+        }
+    }
+}
 
 void addNewChatDialog::addNewChatButtonPressed() {
     if (ui->NewChatNameInput->text() != "") {
@@ -62,6 +82,9 @@ void addNewChatDialog::addNewChatButtonPressed() {
             };
         }
         DB->createChat(QString::number(QRandomGenerator::global()->bounded(100000, 999999)), ui->NewChatNameInput->text(), usersToAdd);
+        close();
+    } else {
+        ui->addChatButton->setText("Please, enter a chat name");
     };
-    close();
+
 }
