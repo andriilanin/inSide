@@ -13,7 +13,7 @@ This way, users can **mentally rehearse scenarios**, view situations from multip
 
 1. The user starts a new "dialogue session."
 2. Creates as many participants (users) for the conversation as needed — for example: HR, Friend, Inner Critic, My Confident Self.
-3. Writes questions or comments from the perspective of the other person.
+3. Writes questions or comments from the perspective of the other person by pressing shortcuts you set.
 4. Responds as themselves.
 5. Plays through the situation until they feel more confident or gain insight on how to approach it.
 
