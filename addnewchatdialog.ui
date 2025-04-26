@@ -75,7 +75,7 @@
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="NewChatNameLayout">
+        <layout class="QHBoxLayout" name="newChatNameLayout">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -83,14 +83,14 @@
           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
          </property>
          <item>
-          <widget class="QLabel" name="NewChatNameLabel">
+          <widget class="QLabel" name="newChatNameLabel">
            <property name="text">
-            <string>Type new chat name: </string>
+            <string>Chat name: </string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="NewChatNameInput">
+          <widget class="QLineEdit" name="newChatNameInput">
            <property name="styleSheet">
             <string notr="true">background: rgb(14,22,33);</string>
            </property>
@@ -115,7 +115,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="UsersLabel">
+        <widget class="QLabel" name="usersLabel">
          <property name="text">
           <string>Users:</string>
          </property>
@@ -138,7 +138,7 @@
         </spacer>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="UsersLayout">
+        <layout class="QVBoxLayout" name="usersLayout">
          <property name="spacing">
           <number>20</number>
          </property>
@@ -148,7 +148,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QPushButton" name="AddNewUserAreaButton">
+            <widget class="QPushButton" name="addNewUserAreaButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -170,7 +170,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="DeleteNewUserAreaButton">
+            <widget class="QPushButton" name="deleteNewUserAreaButton">
              <property name="text">
               <string/>
              </property>

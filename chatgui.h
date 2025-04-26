@@ -8,7 +8,7 @@
 #include <inputtextedit.h>
 
 namespace Ui {
-class ChatGUI;
+class chatGUI;
 }
 
 class ChatGUI : public QWidget
@@ -20,29 +20,30 @@ public:
     ~ChatGUI();
 
     void setChatId(const QString chatId);
-    ChatDatabase* DB;
+    void addNewMessageToArea(const ChatMessage& message);
     QString getChatId();
-    QString getChatName();
     void loadGuiByChatId();
-    void connectUsersKeySequences();
+    void setupShortcuts();
     void reloadMessagesInChat();
     void loadMessagesFromDBToArea();
-    void addNewMessageToArea(const ChatMessage& message);
-
-    void KeySequenceInfoDialogShow();
+    void keySequenceInfoDialogShow();
     void deleteChatDialogExec();
 
 signals:
     void reloadChatsList();
     void chatClosed();
 
+protected:
+
+
 private:
-    InputTextEdit* inputTextEdit = nullptr;
+    ChatDatabase* DB;
     QString chatId;
-    QString chatName;
+
+    InputTextEdit* inputTextEdit = nullptr;
     QVBoxLayout* messageLayout = nullptr;
 
-    Ui::ChatGUI *ui;
+    Ui::chatGUI *ui;
 };
 
 #endif // CHATGUI_H

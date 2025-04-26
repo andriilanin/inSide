@@ -5,7 +5,7 @@
 #include <chatdatabase.h>
 
 namespace Ui {
-class KeySequenceInfoDialog;
+class keySequenceInfoDialog;
 }
 
 class KeySequenceInfoDialog : public QDialog
@@ -18,7 +18,7 @@ public:
 
 private:
     ChatDatabase* DB;
-    Ui::KeySequenceInfoDialog *ui;
+    Ui::keySequenceInfoDialog *ui;
 };
 
 #endif // KEYSEQUENCEINFODIALOG_H

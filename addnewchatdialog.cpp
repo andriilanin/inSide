@@ -7,7 +7,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <vector>
-#define DEFAULT_STYLE "background: rgb(14,22,33);"
+#include <QMessageBox>
+#define DEFAULT_COLOR "background: rgb(14,22,33);"
 
 
 addNewChatDialog::addNewChatDialog(QWidget *parent)
@@ -19,8 +20,8 @@ addNewChatDialog::addNewChatDialog(QWidget *parent)
     this->DB = new ChatDatabase;
     this->DB->load();
 
-    connect(ui->AddNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::addNewUserArea);
-    connect(ui->DeleteNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::deleteNewUserArea);
+    connect(ui->addNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::addNewUserArea);
+    connect(ui->deleteNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::deleteNewUserArea);
     connect(ui->addChatButton, &QPushButton::clicked, this, &addNewChatDialog::addNewChatButtonPressed);
 
     addNewUserArea();
@@ -34,30 +35,31 @@ addNewChatDialog::~addNewChatDialog()
 }
 
 void addNewChatDialog::addNewUserArea() {
-    this->UsersLayouts.push_back(new QHBoxLayout);
-    int userCount = UsersLayouts.size();
+    int userCount = usersLayouts.size();
+    this->usersLayouts.push_back(new QHBoxLayout(this));
 
-    this->UsersLayouts[userCount-1]->addWidget(new QLabel(QString::number(userCount)+".", this));
+    this->usersLayouts[userCount]->addWidget(new QLabel(QString::number(userCount+1)+".", this));
 
-    QLineEdit* NUserName = new QLineEdit(this);
-    NUserName->setPlaceholderText("Enter new user name");
-    NUserName->setStyleSheet(DEFAULT_STYLE);
-    this->UsersLayouts[userCount-1]->addWidget(NUserName);
+    QLineEdit* UserName = new QLineEdit(this);
+    UserName->setPlaceholderText("Enter new user name");
+    UserName->setStyleSheet(DEFAULT_COLOR);
+    this->usersLayouts[userCount]->addWidget(UserName);
 
-    QKeySequenceEdit* NUserKeySequence = new QKeySequenceEdit(this);
-    NUserKeySequence->setStyleSheet(DEFAULT_STYLE);
-    NUserKeySequence->setMaximumSequenceLength(1);
-    this->UsersLayouts[userCount-1]->addWidget(NUserKeySequence);
+    QKeySequenceEdit* UserKeySequence = new QKeySequenceEdit(this);
+    UserKeySequence->setStyleSheet(DEFAULT_COLOR);
+    UserKeySequence->setMaximumSequenceLength(1);
 
-    ui->UsersLayout->insertLayout(ui->UsersLayout->count()-2,this->UsersLayouts[userCount-1]);
+    this->usersLayouts[userCount]->addWidget(UserKeySequence);
+
+    ui->usersLayout->insertLayout(userCount, this->usersLayouts[userCount]);
 };
 
 void addNewChatDialog::deleteNewUserArea() {
-    if (this->UsersLayouts.size() != 0) {
-        QLayoutItem* item = ui->UsersLayout->takeAt(ui->UsersLayout->count()-3);
+    if (!this->usersLayouts.empty()) {
+        QLayoutItem* item = ui->usersLayout->takeAt(ui->usersLayout->count()-3);
         QLayout* childLayout = item->layout();
         if (childLayout) {
-            this->UsersLayouts.pop_back();
+            this->usersLayouts.pop_back();
             while (QLayoutItem* childItem = childLayout->takeAt(0)) {
                 if (QWidget* widget = childItem->widget()) {
                     widget->setParent(nullptr);
@@ -71,20 +73,20 @@ void addNewChatDialog::deleteNewUserArea() {
 }
 
 void addNewChatDialog::addNewChatButtonPressed() {
-    if (ui->NewChatNameInput->text() != "") {
+    if (!ui->newChatNameInput->text().isEmpty()) {
         QList<ChatUser> usersToAdd;
 
-        for (QHBoxLayout* UL : UsersLayouts) {
-            QString UserName = qobject_cast<QLineEdit*>(UL->itemAt(1)->widget())->text();
-            if (UserName != "") {
-                QString UserKeySequence = qobject_cast<QKeySequenceEdit*>(UL->itemAt(2)->widget())->keySequence().toString();
-                usersToAdd.push_back({UserName, UserKeySequence});
+        for (QHBoxLayout* userLayout : usersLayouts) {
+            QString userName = qobject_cast<QLineEdit*>(userLayout->itemAt(1)->widget())->text();
+            if (!userName.isEmpty()) {
+                QString userKeySequence = qobject_cast<QKeySequenceEdit*>(userLayout->itemAt(2)->widget())->keySequence().toString();
+                usersToAdd.push_back({userName, userKeySequence});
             };
         }
-        DB->createChat(QString::number(QRandomGenerator::global()->bounded(100000, 999999)), ui->NewChatNameInput->text(), usersToAdd);
+        this->DB->createChat(QString::number(QRandomGenerator::global()->bounded(100000, 999999)), ui->newChatNameInput->text(), usersToAdd);
         close();
     } else {
-        ui->addChatButton->setText("Please, enter a chat name");
+        QMessageBox::warning(this, tr("Error"), tr("The \"Chat Name\" field cannot be empty."));
     };
 
 }

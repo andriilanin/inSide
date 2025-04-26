@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("inSide");
     this->chatsList = new ChatsList(this);
-    ui->ChatsListLayout->addWidget(this->chatsList);
+    ui->chatsListLayout->addWidget(this->chatsList);
 
 }
 
@@ -25,8 +25,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
 
 void MainWindow::setCurrentChatGUIObj(QString chatId) {
 

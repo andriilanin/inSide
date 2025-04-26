@@ -40,7 +40,7 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="ChatsListLayout">
+     <layout class="QVBoxLayout" name="chatsListLayout">
       <property name="spacing">
        <number>0</number>
       </property>

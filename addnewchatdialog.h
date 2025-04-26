@@ -26,7 +26,7 @@ protected:
     void deleteNewUserArea();
 
 private:
-    std::vector<QHBoxLayout*> UsersLayouts;
+    std::vector<QHBoxLayout*> usersLayouts;
     ChatDatabase* DB;
     Ui::addNewChatDialog *ui;
 };

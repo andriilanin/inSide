@@ -37,7 +37,7 @@ void ChatsList::reloadChatsList() {
             QJsonObject chatObj = chat.toObject();
             QJsonObject lastMessage = chatObj.value("Messages").toArray().last().toObject();
 
-            ChatItem* newChatItem = new ChatItem(this, chatObj.value("ChatName").toString(), lastMessage, this->size().width()-25, chatObj.value("ChatId").toString() );
+            ChatItem* newChatItem = new ChatItem(this, chatObj.value("ChatName").toString(), lastMessage, this->size().width(), chatObj.value("ChatId").toString() );
             connect(this, &ChatsList::resized, newChatItem, [newChatItem](QResizeEvent *event) {
                 newChatItem->elideTextByWidth(event);
             });
@@ -55,8 +55,7 @@ void ChatsList::reloadChatsList() {
 };
 
 void ChatsList::addNewChatButtonPressed() {
-    addNewChatDialog* dialog = new addNewChatDialog;
+    addNewChatDialog* dialog = new addNewChatDialog(this);
     dialog->exec();
-    delete dialog;
     reloadChatsList();
 };

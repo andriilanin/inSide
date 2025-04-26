@@ -6,7 +6,7 @@
 
 KeySequenceInfoDialog::KeySequenceInfoDialog(QWidget *parent, const QString chatId)
     : QDialog(parent)
-    , ui(new Ui::KeySequenceInfoDialog)
+    , ui(new Ui::keySequenceInfoDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Users");

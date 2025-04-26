@@ -14,18 +14,17 @@
 
 ChatGUI::ChatGUI(const QString chatId, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::ChatGUI)
+    , ui(new Ui::chatGUI)
 {
     ui->setupUi(this);
     this->setChatId(chatId);
-    this->DB = new ChatDatabase();
+    this->DB = new ChatDatabase(this);
     loadGuiByChatId();
-    connect(ui->KeySequenceInfo, &QPushButton::clicked, this, &ChatGUI::KeySequenceInfoDialogShow);
+    connect(ui->keySequenceInfo, &QPushButton::clicked, this, &ChatGUI::keySequenceInfoDialogShow);
     connect(ui->deleteChatButton, &QPushButton::clicked, this, &ChatGUI::deleteChatDialogExec);
 }
 
-ChatGUI::~ChatGUI()
-{
+ChatGUI::~ChatGUI() {
     emit chatClosed();
     delete ui;
 }
@@ -35,6 +34,7 @@ void ChatGUI::setChatId(const QString chatId){
 };
 
 void ChatGUI::loadGuiByChatId() {
+
     DB->load();
     ui->labelName->setText(DB->getChatById(this->chatId).value("ChatName").toString());
 
@@ -42,17 +42,18 @@ void ChatGUI::loadGuiByChatId() {
     this->inputTextEdit->setPlaceholderText("Write a message...");
     ui->inputTextEditLayout->addWidget(this->inputTextEdit);
 
-    connectUsersKeySequences();
+    setupShortcuts();
     loadMessagesFromDBToArea();
 };
 
-void ChatGUI::KeySequenceInfoDialogShow() {
-    KeySequenceInfoDialog* KSID = new KeySequenceInfoDialog(this, getChatId());
+void ChatGUI::keySequenceInfoDialogShow() {
+    auto* KSID = new KeySequenceInfoDialog(this, getChatId());
     KSID->show();
 };
 
 void ChatGUI::deleteChatDialogExec() {
-    deleteChatConfirm* DCC = new deleteChatConfirm(this, getChatId());
+
+    auto* DCC = new deleteChatConfirm(this, getChatId());
     connect(DCC, &deleteChatConfirm::confirmSignal, this, [this](){
         emit reloadChatsList();
         emit chatClosed();
@@ -61,19 +62,19 @@ void ChatGUI::deleteChatDialogExec() {
     DCC->exec();
 }
 
-void ChatGUI::connectUsersKeySequences() {
+void ChatGUI::setupShortcuts() {
 
-    QJsonArray usersArray = DB->getChatById(this->chatId).value("Users").toArray();
-    for (const QJsonValueRef& user : usersArray) {
-        QJsonObject userObj = user.toObject();
+    const QJsonArray usersArray = DB->getChatById(this->chatId).value("Users").toArray();
+    for (const QJsonValue& user : usersArray) {
+        auto userObj = user.toObject();
 
-        QKeySequence* userKeySequence = new QKeySequence(userObj.value("KeySequence").toString());
-        QShortcut* runtimeShortcut = new QShortcut(*userKeySequence, this);
+        QKeySequence userKeySequence(userObj.value("KeySequence").toString());
+        QShortcut* runtimeShortcut = new QShortcut(userKeySequence, this);
 
         connect(runtimeShortcut, &QShortcut::activated, this, [=]() {
-            QString inputText = this->inputTextEdit->toPlainText();
+            auto inputText = this->inputTextEdit->toPlainText();
             if (!inputText.trimmed().isEmpty()) {
-                QString userName = DB->getUserNameByKeySequence(this->getChatId(), *userKeySequence);
+                auto userName = DB->getUserNameByKeySequence(this->getChatId(), userKeySequence);
                 ChatMessage msg = { userName, inputText, QDateTime::currentDateTime().toString(Qt::ISODate) };
 
                 DB->addMessage(this->getChatId(), msg);
@@ -86,8 +87,8 @@ void ChatGUI::connectUsersKeySequences() {
     }
 
     connect(this->inputTextEdit, &InputTextEdit::enterPressed, this, [=]() {
-        QString inputText = this->inputTextEdit->toPlainText();
-        if (inputText != ""){
+        auto inputText = this->inputTextEdit->toPlainText();
+        if (!inputText.trimmed().isEmpty()){
             ChatMessage msg = { "You", inputText, QDateTime::currentDateTime().toString(Qt::ISODate) };
 
             DB->addMessage(this->getChatId(), msg);
@@ -106,7 +107,7 @@ void ChatGUI::addNewMessageToArea(const ChatMessage& message) {
     bool isSameUserName = false;
 
     if (lastMessageItem) {
-        QString lastMessageUserName = lastMessageItem->getName();
+        auto lastMessageUserName = lastMessageItem->getName();
         isSameUserName = message.userName == lastMessageUserName;
     }
     if (this->messageLayout) {
@@ -116,38 +117,31 @@ void ChatGUI::addNewMessageToArea(const ChatMessage& message) {
 
     QTimer::singleShot(0, this, [this]() {
         qApp->processEvents();
-        ui->MessagesArea->widget()->adjustSize();
-        QScrollBar* bar = ui->MessagesArea->verticalScrollBar();
+        ui->messagesArea->widget()->adjustSize();
+        QScrollBar* bar = ui->messagesArea->verticalScrollBar();
         bar->setValue(bar->maximum());
     });
 };
 
 void ChatGUI::loadMessagesFromDBToArea() {
-
-    QWidget* messagesScrollContent = new QWidget();
+    auto* messagesScrollContent = new QWidget(this);
     this->messageLayout = new QVBoxLayout(messagesScrollContent);
     this->messageLayout->setSpacing(4);
     this->messageLayout->setContentsMargins(10, 10, 10, 10);
     this->messageLayout->insertStretch(0);
 
     messagesScrollContent->setLayout(this->messageLayout);
-    ui->MessagesArea->setWidget(messagesScrollContent);
+    ui->messagesArea->setWidget(messagesScrollContent);
 
-    if (DB->load()) {
-        QJsonArray messagesArray = DB->getChatById(this->getChatId()).value("Messages").toArray();
-        for (const QJsonValueRef& message : messagesArray) {
-            QJsonObject messageObj = message.toObject();
+    const QJsonArray messagesArray = DB->getChatById(this->getChatId()).value("Messages").toArray();
+    for (const QJsonValue& message : messagesArray) {
+        auto messageObj = message.toObject();
 
-            ChatMessage msg = {messageObj.value("UserName").toString(), messageObj.value("Text").toString(), messageObj.value("Time").toString() };
-            addNewMessageToArea(msg);
-        };
+        ChatMessage msg = { messageObj.value("UserName").toString(), messageObj.value("Text").toString(), messageObj.value("Time").toString() };
+        addNewMessageToArea(msg);
     };
 };
 
 QString ChatGUI::getChatId(){
     return this->chatId;
-};
-
-QString ChatGUI::getChatName(){
-    return this->chatName;
 };

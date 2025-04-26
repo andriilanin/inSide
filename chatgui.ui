@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ChatGUI</class>
- <widget class="QWidget" name="ChatGUI">
+ <class>chatGUI</class>
+ <widget class="QWidget" name="chatGUI">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -33,7 +33,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="FrameName">
+    <widget class="QFrame" name="frameName">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -106,7 +106,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="KeySequenceInfo">
+         <widget class="QPushButton" name="keySequenceInfo">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -160,7 +160,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QScrollArea" name="MessagesArea">
+    <widget class="QScrollArea" name="messagesArea">
      <property name="styleSheet">
       <string notr="true">background: rgb(14,22,33);</string>
      </property>
