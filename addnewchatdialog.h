@@ -17,7 +17,6 @@ public:
     explicit addNewChatDialog(QWidget *parent = nullptr);
     ~addNewChatDialog();
 
-
 private slots:
     void addNewChatButtonPressed();
 

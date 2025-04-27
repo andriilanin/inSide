@@ -84,6 +84,7 @@ void addNewChatDialog::addNewChatButtonPressed() {
             };
         }
         this->DB->createChat(QString::number(QRandomGenerator::global()->bounded(100000, 999999)), ui->newChatNameInput->text(), usersToAdd);
+        emit accepted();
         close();
     } else {
         QMessageBox::warning(this, tr("Error"), tr("The \"Chat Name\" field cannot be empty."));

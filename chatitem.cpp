@@ -18,7 +18,9 @@ ChatItem::ChatItem( QWidget *parent, const QString &chatName, QJsonObject &lastM
     this->fullTextToElide = lastMessageObj.value("Text").toString();
 
     ui->chatNameLabel->setText(chatName);
-    ui->userNameLabel->setText(!lastMessageObj.value("UserName").toString().isEmpty() ? lastMessageObj.value("UserName").toString() : "No message yet");
+    QString userName = lastMessageObj.value("UserName").toString();
+    ui->userNameLabel->setText(userName.isEmpty() ? "No message yet" : userName);
+
     elideTextByWidth(chatsListwidth);
 }
 
@@ -27,20 +29,12 @@ ChatItem::~ChatItem()
     delete ui;
 }
 
-void ChatItem::applyElide(int width) {
+void ChatItem::elideTextByWidth(int width) {
     if (width - 40 <= 0) return;
 
     QFontMetrics fontMetric(ui->lastMessageLabel->font());
     QString elided = fontMetric.elidedText(this->fullTextToElide, Qt::ElideRight, width - 40);
     ui->lastMessageLabel->setText(elided);
-}
-
-void ChatItem::elideTextByWidth(QResizeEvent* event) {
-    applyElide(event->size().width());
-};
-
-void ChatItem::elideTextByWidth(int width) {
-    applyElide(width);
 };
 
 
@@ -48,16 +42,6 @@ void ChatItem::mousePressEvent(QMouseEvent* event) {
     emit clicked(this->chatId);
     QWidget::mousePressEvent(event);
 };
-
-bool ChatItem::eventFilter(QObject* obj, QEvent* event)
-{
-    if (event->type() == QEvent::Enter)
-        setStyleSheet(HOVERED_STYLE);
-    else if (event->type() == QEvent::Leave)
-        setStyleSheet(DEFAULT_STYLE);
-
-    return QWidget::eventFilter(obj, event);
-}
 
 void ChatItem::enterEvent(QEnterEvent* event)
 {

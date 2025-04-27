@@ -17,13 +17,11 @@ class ChatItem : public QWidget
 public:
     explicit ChatItem( QWidget *parent, const QString &chatName, QJsonObject &lastMessageObj, int chatsListwidth, const QString &chatId );
     ~ChatItem();
-    void elideTextByWidth(QResizeEvent* event);
+    void elideTextByWidth(int width);
 
 protected:
 
-    void elideTextByWidth(int width);
     void mousePressEvent(QMouseEvent *event) override;
-    bool eventFilter(QObject* obj, QEvent* event) override;
 
     void enterEvent(QEnterEvent* event) override;
     void leaveEvent(QEvent* event) override;

@@ -39,7 +39,7 @@ void ChatsList::reloadChatsList() {
 
             ChatItem* newChatItem = new ChatItem(this, chatObj.value("ChatName").toString(), lastMessage, this->size().width(), chatObj.value("ChatId").toString() );
             connect(this, &ChatsList::resized, newChatItem, [newChatItem](QResizeEvent *event) {
-                newChatItem->elideTextByWidth(event);
+                newChatItem->elideTextByWidth(event->size().width());
             });
             connect(newChatItem, &ChatItem::clicked, mainWindow, &MainWindow::setCurrentChatGUIObj);
 
@@ -56,6 +56,6 @@ void ChatsList::reloadChatsList() {
 
 void ChatsList::addNewChatButtonPressed() {
     addNewChatDialog* dialog = new addNewChatDialog(this);
+    connect(dialog, &addNewChatDialog::accepted, this, &ChatsList::reloadChatsList);
     dialog->exec();
-    reloadChatsList();
 };
