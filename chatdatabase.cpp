@@ -1,6 +1,7 @@
 #include "chatdatabase.h"
 #include <QDebug>
 #include <QKeySequence>
+
 ChatDatabase::ChatDatabase(QObject* parent) : QObject(parent) {}
 
 ChatDatabase::~ChatDatabase() {}

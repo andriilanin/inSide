@@ -6,16 +6,16 @@
 #include "chatdatabase.h"
 #include <vector>
 namespace Ui {
-class addNewChatDialog;
+class AddNewChatDialog;
 }
 
-class addNewChatDialog : public QDialog
+class AddNewChatDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit addNewChatDialog(QWidget *parent = nullptr);
-    ~addNewChatDialog();
+    explicit AddNewChatDialog(QWidget *parent = nullptr);
+    ~AddNewChatDialog();
 
 private slots:
     void addNewChatButtonPressed();
@@ -27,7 +27,7 @@ protected:
 private:
     std::vector<QHBoxLayout*> usersLayouts;
     ChatDatabase* DB;
-    Ui::addNewChatDialog *ui;
+    Ui::AddNewChatDialog *ui;
 };
 
 #endif // ADDNEWCHATDIALOG_H

@@ -1,23 +1,8 @@
 #include "messageitem.h"
 #include "ui_messageitem.h"
-
-
-QString splitLongWords(const QString& text, int maxLength = 50)
-{
-    QStringList words = text.split(" ");
-    QStringList result;
-
-    for (QString word : words) {
-        while (word.length() > maxLength) {
-            result << word.left(maxLength);
-            word = word.mid(maxLength);
-        }
-        result << word;
-    }
-
-    return result.join(" ");
-}
-
+#define outGoingBackground "background: rgb(43, 82, 120);\n"
+#define inComingBackground "background: rgb(24,37,51);\n"
+#define userNameStyle "color: rgb(179,140,208);\n"
 
 QString wrapText(const QString& text, int maxLineLength) {
     QStringList lines;
@@ -34,7 +19,6 @@ QString wrapText(const QString& text, int maxLineLength) {
     if (!currentLine.isEmpty()) {
         lines.append(currentLine.trimmed());
     }
-
     return lines.join("\n");
 }
 
@@ -44,39 +28,28 @@ MessageItem::MessageItem(QWidget *parent, QString text, QString userName, bool i
 {
 
     ui->setupUi(this);
-
-
-
-
     if (isSameUserName || userName == "You") {
         ui->userName->hide();
     };
 
+    QString style = ui->messageWidget->styleSheet();
 
-    QString style = "color: rgb(228, 236, 242);\nborder-top-left-radius: 10px;\nborder-top-right-radius: 10px;\n";
     if (userName != "You") {
-        style += "background: rgb(24,37,51);";
+        style += inComingBackground;
         ui->userName->setText(userName);
-        ui->userName->setStyleSheet("color: rgb(179,140,208);\n");
-
+        ui->userName->setStyleSheet(userNameStyle);
     } else {
-        style += "background: rgb(43, 82, 120);";
+        style += outGoingBackground;
     };
 
 
+    style += "border-bottom-";
+    style += ( isOutGoing ? "left" : "right" );
+    style += "-radius: 10px;\n";
 
-
-    if (isOutGoing) {
-        style += "border-bottom-left-radius: 10px;\n";
-    } else {
-        style += "border-bottom-right-radius: 10px;\n";
-    };
-
-        ui->messageText->setText(wrapText(text, 72));
-        ui->messageWidget->setStyleSheet(style);
+    ui->messageText->setText(wrapText(text, 72));
+    ui->messageWidget->setStyleSheet(style);
 }
-
-
 
 MessageItem::~MessageItem()
 {

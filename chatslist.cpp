@@ -3,7 +3,7 @@
 #include "chatitem.h"
 #include "chatdatabase.h"
 #include "mainwindow.h"
-#include "addnewchatdialog.h"
+#include "AddNewChatDialog.h"
 #include <QPushButton>
 
 ChatsList::ChatsList(MainWindow *parent)
@@ -14,7 +14,7 @@ ChatsList::ChatsList(MainWindow *parent)
     ui->setupUi(this);
     connect(ui->addNewChatButton, &QPushButton::clicked, this, &ChatsList::addNewChatButtonPressed);
 
-    this->DB = new ChatDatabase();
+    this->DB = new ChatDatabase(this);
     reloadChatsList();
 }
 
@@ -31,8 +31,8 @@ void ChatsList::reloadChatsList() {
     QWidget *scrollContent = new QWidget;
     QVBoxLayout* scrollLayout = new QVBoxLayout(scrollContent);
 
-    if (DB->load()) {
-        const QJsonArray  chats = DB->getChats();
+    if (this->DB->load()) {
+        const QJsonArray  chats = this->DB->getChats();
         for (const QJsonValue& chat : chats) {
             QJsonObject chatObj = chat.toObject();
             QJsonObject lastMessage = chatObj.value("Messages").toArray().last().toObject();
@@ -55,7 +55,7 @@ void ChatsList::reloadChatsList() {
 };
 
 void ChatsList::addNewChatButtonPressed() {
-    addNewChatDialog* dialog = new addNewChatDialog(this);
-    connect(dialog, &addNewChatDialog::accepted, this, &ChatsList::reloadChatsList);
+    AddNewChatDialog* dialog = new AddNewChatDialog(this);
+    connect(dialog, &AddNewChatDialog::accepted, this, &ChatsList::reloadChatsList);
     dialog->exec();
 };

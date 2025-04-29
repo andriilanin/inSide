@@ -7,7 +7,7 @@
 #include <QJsonObject>
 
 namespace Ui {
-class chatItem;
+class ChatItem;
 }
 
 class ChatItem : public QWidget
@@ -34,7 +34,7 @@ signals:
 private:
     QString fullTextToElide;
     QString chatId;
-    Ui::chatItem *ui;
+    Ui::ChatItem *ui;
 };
 
 #endif // CHATITEM_H

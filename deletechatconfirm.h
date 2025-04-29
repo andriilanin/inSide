@@ -5,16 +5,16 @@
 #include <chatdatabase.h>
 
 namespace Ui {
-class deleteChatConfirm;
+class DeleteChatConfirm;
 }
 
-class deleteChatConfirm : public QDialog
+class DeleteChatConfirm : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit deleteChatConfirm(QWidget *parent = nullptr, const QString chatId = "");
-    ~deleteChatConfirm();
+    explicit DeleteChatConfirm(QWidget *parent = nullptr, const QString chatId = "");
+    ~DeleteChatConfirm();
 
 
 signals:
@@ -27,7 +27,7 @@ protected:
 private:
     QString chatId;
     ChatDatabase* DB;
-    Ui::deleteChatConfirm *ui;
+    Ui::DeleteChatConfirm *ui;
 };
 
 #endif // DELETECHATCONFIRM_H

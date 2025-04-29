@@ -9,7 +9,7 @@
 
 ChatItem::ChatItem( QWidget *parent, const QString &chatName, QJsonObject &lastMessageObj, int chatsListwidth, const QString &chatId )
     : QWidget(parent)
-    , ui(new Ui::chatItem)
+    , ui(new Ui::ChatItem)
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_Hover);

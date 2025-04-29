@@ -1,30 +1,30 @@
-#include "deletechatconfirm.h"
-#include "ui_deletechatconfirm.h"
+#include "DeleteChatConfirm.h"
+#include "ui_DeleteChatConfirm.h"
 #include <QPushButton>
 
-deleteChatConfirm::deleteChatConfirm(QWidget *parent, const QString chatId)
+DeleteChatConfirm::DeleteChatConfirm(QWidget *parent, const QString chatId)
     : QDialog(parent)
-    , ui(new Ui::deleteChatConfirm)
+    , ui(new Ui::DeleteChatConfirm)
 {
     ui->setupUi(this);
-    this->DB = new ChatDatabase();
-    DB->load();
+    this->DB = new ChatDatabase(this);
+    this->DB->load();
     this->chatId = chatId;
-    connect(ui->confirmButton, &QPushButton::clicked, this, &deleteChatConfirm::confirm);
-    connect(ui->cancelButton, &QPushButton::clicked, this, &deleteChatConfirm::cancel);
+    connect(ui->confirmButton, &QPushButton::clicked, this, &DeleteChatConfirm::confirm);
+    connect(ui->cancelButton, &QPushButton::clicked, this, &DeleteChatConfirm::cancel);
 }
 
-deleteChatConfirm::~deleteChatConfirm()
+DeleteChatConfirm::~DeleteChatConfirm()
 {
     delete ui;
 }
 
-void deleteChatConfirm::confirm() {
+void DeleteChatConfirm::confirm() {
     this->DB->deleteChatById(this->chatId);
     close();
     emit confirmSignal();
 };
 
-void deleteChatConfirm::cancel() {
+void DeleteChatConfirm::cancel() {
     close();
 };

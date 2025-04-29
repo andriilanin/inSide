@@ -6,20 +6,20 @@
 
 KeySequenceInfoDialog::KeySequenceInfoDialog(QWidget *parent, const QString chatId)
     : QDialog(parent)
-    , ui(new Ui::keySequenceInfoDialog)
+    , ui(new Ui::KeySequenceInfoDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Users");
-    this->DB = new ChatDatabase();
-    DB->load();
-    QJsonObject chatObj = DB->getChatById(chatId);
+    this->DB = new ChatDatabase(this);
+    this->DB->load();
+    QJsonObject chatObj = this->DB->getChatById(chatId);
     const QJsonArray usersArray = chatObj.value("Users").toArray();
     for (const QJsonValue& user : usersArray) {
         QJsonObject userObj = user.toObject();
 
         QHBoxLayout* currentUserLayout = new QHBoxLayout();
         currentUserLayout->addWidget(new QLabel(userObj.value("UserName").toString()));
-        currentUserLayout->insertSpacerItem(1, new QSpacerItem(5, 0, QSizePolicy::Fixed));
+        currentUserLayout->addSpacing(10);
         currentUserLayout->addWidget(new QLabel(userObj.value("KeySequence").toString()));
         ui->usersLayout->addLayout(currentUserLayout);
         ui->usersLayout->addSpacerItem(new QSpacerItem(0, 20, QSizePolicy::Fixed, QSizePolicy::Fixed));

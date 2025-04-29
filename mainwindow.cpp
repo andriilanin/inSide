@@ -31,9 +31,9 @@ void MainWindow::setCurrentChatGUIObj(QString chatId) {
     if (this->currentChatGUIObj != nullptr) {
         delete currentChatGUIObj;
     };
-    this->currentChatGUIObj = new ChatGUI(chatId, this);
+    this->currentChatGUIObj = new ChatGUI(this, chatId);
     ui->currentChatLayout->addWidget(this->currentChatGUIObj);
-    connect(this->currentChatGUIObj, &ChatGUI::reloadChatsList, this->chatsList, [this]() {
+    connect(this->currentChatGUIObj, &ChatGUI::reloadChatsList, this, [this]() {
         this->chatsList->reloadChatsList();
     });
     ui->selectChatLabel->hide();

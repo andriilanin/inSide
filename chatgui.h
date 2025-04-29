@@ -8,7 +8,7 @@
 #include <inputtextedit.h>
 
 namespace Ui {
-class chatGUI;
+class ChatGUI;
 }
 
 class ChatGUI : public QWidget
@@ -16,7 +16,7 @@ class ChatGUI : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatGUI(const QString chatId, QWidget *parent = nullptr);
+    explicit ChatGUI(QWidget *parent = nullptr, const QString chatId = "");
     ~ChatGUI();
 
     void setChatId(const QString chatId);
@@ -43,7 +43,7 @@ private:
     InputTextEdit* inputTextEdit = nullptr;
     QVBoxLayout* messageLayout = nullptr;
 
-    Ui::chatGUI *ui;
+    Ui::ChatGUI *ui;
 };
 
 #endif // CHATGUI_H

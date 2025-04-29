@@ -1,5 +1,5 @@
-#include "addnewchatdialog.h"
-#include "ui_addnewchatdialog.h"
+#include "AddNewChatDialog.h"
+#include "ui_AddNewChatDialog.h"
 #include <QRandomGenerator>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -11,30 +11,30 @@
 #define DEFAULT_COLOR "background: rgb(14,22,33);"
 
 
-addNewChatDialog::addNewChatDialog(QWidget *parent)
+AddNewChatDialog::AddNewChatDialog(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::addNewChatDialog)
+    , ui(new Ui::AddNewChatDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Add new chat");
     this->DB = new ChatDatabase;
     this->DB->load();
 
-    connect(ui->addNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::addNewUserArea);
-    connect(ui->deleteNewUserAreaButton, &QPushButton::clicked, this, &addNewChatDialog::deleteNewUserArea);
-    connect(ui->addChatButton, &QPushButton::clicked, this, &addNewChatDialog::addNewChatButtonPressed);
+    connect(ui->addNewUserAreaButton, &QPushButton::clicked, this, &AddNewChatDialog::addNewUserArea);
+    connect(ui->deleteNewUserAreaButton, &QPushButton::clicked, this, &AddNewChatDialog::deleteNewUserArea);
+    connect(ui->addChatButton, &QPushButton::clicked, this, &AddNewChatDialog::addNewChatButtonPressed);
 
     addNewUserArea();
 
 }
 
-addNewChatDialog::~addNewChatDialog()
+AddNewChatDialog::~AddNewChatDialog()
 {
     delete this->DB;
     delete ui;
 }
 
-void addNewChatDialog::addNewUserArea() {
+void AddNewChatDialog::addNewUserArea() {
     int userCount = usersLayouts.size();
     this->usersLayouts.push_back(new QHBoxLayout(this));
 
@@ -54,7 +54,7 @@ void addNewChatDialog::addNewUserArea() {
     ui->usersLayout->insertLayout(userCount, this->usersLayouts[userCount]);
 };
 
-void addNewChatDialog::deleteNewUserArea() {
+void AddNewChatDialog::deleteNewUserArea() {
     if (!this->usersLayouts.empty()) {
         QLayoutItem* item = ui->usersLayout->takeAt(ui->usersLayout->count()-3);
         QLayout* childLayout = item->layout();
@@ -72,7 +72,7 @@ void addNewChatDialog::deleteNewUserArea() {
     }
 }
 
-void addNewChatDialog::addNewChatButtonPressed() {
+void AddNewChatDialog::addNewChatButtonPressed() {
     if (!ui->newChatNameInput->text().isEmpty()) {
         QList<ChatUser> usersToAdd;
 

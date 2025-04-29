@@ -58,7 +58,7 @@
         </sizepolicy>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">color: rgb(228, 236, 242);border-top-left-radius: 10px;border-top-right-radius: 10px;</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
         <item>
